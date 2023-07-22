@@ -42,7 +42,8 @@ int main()
 		char buffer[3000] = {0};
 		int valread = read(new_socket,buffer, 3000);
 		std::cout << buffer << std::endl;
-		std::string hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";;
+		std::string hello = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 11
+		\r\n\r\nHello world!\r\n";;
 		send(new_socket, &hello[0], strlen(&hello[0]), 0);
 		std::cout << "Hello message sent" << std::endl;
 		close(new_socket);

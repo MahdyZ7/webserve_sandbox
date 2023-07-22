@@ -10,4 +10,5 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
+#define CLRF "\r\n"
 #endif
