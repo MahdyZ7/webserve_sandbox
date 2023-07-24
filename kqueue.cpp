@@ -10,13 +10,20 @@
      {
 		struct	kevent event;	 /* Event we want to monitor */
 		struct	kevent tevent;	 /* Event triggered */
-		int kq, fd, ret;
+		int kq, fd[argc - 1], ret;
 
-		if (argc != 2)
+		if (argc < 2)
 			err(EXIT_FAILURE, "Usage: %s path\n", argv[0]);
-		fd = open(argv[1], O_RDONLY);
-		if (fd	== -1)
-			err(EXIT_FAILURE, "Failed to open '%s'", argv[1]);
+		
+		for (int i = 1; i < argc; i++)
+		{
+			fd[i - 1] = open(argv[i], O_RDONLY);
+			if (fd[i - 1]	== -1)
+				err(EXIT_FAILURE, "Failed to open '%s'", argv[i]);
+		}
+		// fd = open(argv[1], O_RDONLY);
+		// if (fd	== -1)
+		// 	err(EXIT_FAILURE, "Failed to open '%s'", argv[1]);
 
 		/* Create kqueue. */
 		kq = kqueue();
@@ -24,8 +31,8 @@
 			err(EXIT_FAILURE, "kqueue() failed");
 
 		/* Initialize kevent structure. */
-		EV_SET(&event,	fd, EVFILT_VNODE, EV_ADD | EV_CLEAR, NOTE_WRITE,
-			0,	NULL);
+		for (int i = 0; i < argc - 1; i++)
+			EV_SET(&event,	fd[i], EVFILT_VNODE, EV_ADD | EV_CLEAR, NOTE_WRITE, 0,	NULL);
 		/* Attach event to the	kqueue.	*/
 		ret = kevent(kq, &event, 1, NULL, 0, NULL);
 		if (ret == -1)

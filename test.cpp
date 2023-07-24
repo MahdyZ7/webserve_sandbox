@@ -68,8 +68,7 @@ int main()
 {
 	std::string x="";
 
-	while (x != "x")
-	{
+	while (x != "x"){
 		std::cin >> x;
 		try
 		{
